@@ -2,7 +2,11 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate(SQL);
+            statement.close();
             System.out.println("Table create");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,6 +38,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate(SQL);
+            statement.close();
             System.out.println("Table delete");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,12 +49,11 @@ public class UserDaoJDBCImpl implements UserDao {
         String SQL = "INSERT INTO user(name, lastName, age) VALUES (?, ?, ?)";
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-
+            preparedStatement.close();
             System.out.println("User with name " + name + " added to database");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,6 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
             System.out.println("User remove");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +80,6 @@ public class UserDaoJDBCImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery(SQL);
             while (resultSet.next()) {
                 User user = new User();
-
                 user.setId(resultSet.getLong("id"));
                 user.setName(resultSet.getString("name"));
                 user.setLastName(resultSet.getString("lastname"));
@@ -92,6 +97,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
