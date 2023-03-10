@@ -25,7 +25,6 @@ public class UserDaoJDBCImpl implements UserDao {
                      "  PRIMARY KEY (`id`));";
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(SQL);
-            System.out.println("Table create");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,7 +34,6 @@ public class UserDaoJDBCImpl implements UserDao {
         String SQL = "DROP TABLE IF EXISTS user";
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(SQL);
-            System.out.println("Table delete");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,7 +46,6 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-            System.out.println("User with name " + name + " added to database");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,7 +56,6 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-            System.out.println("User remove");
         } catch (SQLException e) {
             e.printStackTrace();
         }
