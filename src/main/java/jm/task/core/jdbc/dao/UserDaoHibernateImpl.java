@@ -82,10 +82,9 @@ public class UserDaoHibernateImpl implements UserDao {
         List<User> userList = new ArrayList<>();
         Transaction transaction = null;
         try(Session session = sessionFactory.openSession()){
-            CriteriaQuery<User> criteriaQuery = session.getCriteriaBuilder().createQuery(User.class);
-            criteriaQuery.from(User.class);
             transaction = session.beginTransaction();
-            userList = session.createQuery(criteriaQuery).getResultList();
+            userList = session.createQuery("from User").getResultList();
+            session.getTransaction().commit();
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -99,7 +98,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try(Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.createSQLQuery("DELETE FROM User").executeUpdate();
+            session.createSQLQuery("TRUNCATE TABLE User").executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateException e) {
             if (transaction != null) {
